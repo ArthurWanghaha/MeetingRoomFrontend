@@ -1,0 +1,74 @@
+.progress-tracker{
+    padding: 1rem;
+    width: 100%;
+}
+
+.tracker{
+    display: flex;
+    width: 100%;
+    padding: 1rem 0rem;
+    border-top: 1px solid #a8a8a8;
+}
+
+
+
+.tracker-left{
+    padding: 0.5rem 1rem;
+    width: 40%;
+}
+
+.tracker-mid{
+    padding: 0.5rem;
+    width: 50%;
+}
+
+.tracker-right{
+    padding: 0.5rem;
+    width: 10%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.tracker-title{
+    font-size: 18px;
+    color: #444444;
+}
+
+.tracker-para{
+    font-size: 12px;
+    margin-top: 4px;
+    color: #444444;
+    opacity: 0.6;
+}
+
+.tracker-info-1{
+    display: flex; 
+    align-items: center;
+    color: #6A707E;
+}
+
+.tracker-info{
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@media (min-width:1500px){
+
+    .tracker-left{
+        width: 30%;
+    }
+    
+    .tracker-mid{
+        width: 60%;
+    }
+
+    .progress-tracker{
+        padding-top: 2rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
+        padding-bottom: 0;
+    }
+}

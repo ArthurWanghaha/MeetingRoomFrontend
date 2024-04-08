@@ -1,0 +1,100 @@
+/* ------------------------------------------Global Styles---------------------------------------------------------- */
+
+.App{
+  background-color: #F3F6F9;
+  max-width: 100vw;
+  /* overflow-x: hidden; */
+  flex-wrap: wrap;
+  color:#606060;
+  display: flex;
+}
+
+.container{
+  width: 80vw;
+  max-width: 80vw;
+  overflow-x: hidden;
+  /* background-color: rgb(255, 238, 0); */
+  max-height:100vh;
+  overflow-y: scroll;
+  margin-left: 20vw;
+}
+
+.container::-webkit-scrollbar {
+  display: none;
+}
+
+.lg-container{
+  width:100%;
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 100vh;
+  /* background-color: chartreuse; */
+}
+
+.md-container{
+  width:70%;
+  /* background-color: blueviolet; */
+}
+
+.sm-container{
+  width: 30%;
+  /* background-color: blue; */
+}
+
+.ok-container {
+  width: 50%;
+  /* background-color: blue; */
+}
+
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  margin-bottom: 20px;
+}
+
+.title{
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.page-enter {
+  transform: translateX(100%);
+}
+
+.page-enter-active {
+  transform: translateX(0);
+  transition: transform 300ms ease-in-out;
+}
+
+.lg-mid-container {
+  width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 100vh;
+  justify-content: center;
+}
+
+.page-exit {
+  transform: translateX(0);
+}
+
+.page-exit-active {
+  transform: translateX(-100%);
+  transition: transform 300ms ease-in-out;
+}
+
+
+
+@media (min-width:1500px){
+  .md-container{
+    width:75%;
+    /* background-color: blueviolet; */
+  }
+  
+  .sm-container{
+    width: 25%;
+    /* background-color: blue; */
+  }
+}

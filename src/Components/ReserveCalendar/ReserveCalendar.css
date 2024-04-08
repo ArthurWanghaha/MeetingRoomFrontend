@@ -1,0 +1,30 @@
+.calendar-container{
+ padding: 1rem;
+}
+.selected-day {
+  background-color: #007bff;
+  /* Blue background color */
+  color: white;
+  /* White text color */
+  border-radius: 50%;
+  /* Make the day circle */
+}
+
+
+.underline {
+  text-decoration: underline;
+}
+
+.calendar-title {
+  margin-bottom: -1rem;
+  /* Adjust the margin below the title */
+}
+
+@media (min-width:1500px){
+  .calendar{
+    padding-top: 0rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+  }
+}

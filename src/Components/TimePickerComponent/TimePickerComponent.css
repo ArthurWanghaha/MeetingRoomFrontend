@@ -1,0 +1,36 @@
+.timepicker-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+        /* Horizontally align components */
+        align-items: center;
+
+}
+
+.timepicker-column {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    /* Add space between the two TimePicker components */
+}
+
+.timepicker-container{
+    padding: 1rem;
+}
+
+.timepicker-input {
+    color: black;
+    /* Default text color */
+    border: 1px solid #ccc;
+    /* Default border color */
+    padding: 8px;
+    /* Adjust padding as needed */
+    width: 100%;
+    /* Full width */
+    box-sizing: border-box;
+    /* Include padding and border in width */
+}
+
+.border-changed {
+    border-color: red;
+    /* Custom border color */
+}
