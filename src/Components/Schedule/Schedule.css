@@ -1,0 +1,66 @@
+.meeting-schedule-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.invitation-paper {
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.meeting-section {
+    margin-bottom: 20px;
+}
+
+.meeting-section-title {
+    margin-bottom: 10px;
+}
+
+.meeting-card {
+    display: flex;
+    flex-direction: row;
+    /* Changed to row */
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.meeting-room-image {
+    width: 30%;
+    /* Smaller image */
+    height: auto;
+    border-radius: 8px;
+    margin-right: 10px;
+    /* Added margin to separate from details */
+}
+
+.meeting-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* Vertically center details */
+    flex-grow: 1;
+    /* Allow details to take up remaining space */
+}
+
+.meeting-detail-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.meeting-detail-item svg {
+    margin-right: 8px;
+}

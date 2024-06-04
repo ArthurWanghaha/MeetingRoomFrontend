@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Table,
   TableBody,
@@ -8,39 +7,55 @@ import {
   TableHead,
   TableRow,
   Paper,
-} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
+  Button,
+  Grid,
+  Typography,
+  TextField,
+  Modal,
+  Box,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 import Pagination from "../Pagination/Pagination";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import { List, ListItem, ListItemText } from "@material-ui/core";
-import TextField from "@material-ui/core/TextField";
-import api from "../../api/axiosConfig";
 import { jwtDecode } from "jwt-decode";
-
+import api from "../../api/axiosConfig";
 import bearGIF from "../../Images/bear-cute.gif";
-import { MeetingRoom } from "@material-ui/icons";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    padding: theme.spacing(2),
-  },
-  paper: {
-    margin: theme.spacing(1),
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
-  },
-  image: {
-    width: "100%",
-    height: "auto",
-    marginBottom: theme.spacing(1),
-  },
-  card: {},
+const Root = styled("div")(({ theme }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(2),
 }));
+
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  margin: theme.spacing(1),
+  padding: theme.spacing(2),
+  textAlign: "center",
+  color: theme.palette.text.secondary,
+}));
+
+const Image = styled("img")({
+  width: "100%",
+  height: "auto",
+  marginBottom: 16,
+});
+
+const GifContainer = styled("div")({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  marginTop: 16,
+});
+
+const formatDateToYYYYMMDD = (date) => {
+  if (!(date instanceof Date) || isNaN(date)) return null;
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}${month}${day}`;
+};
 
 const Reserve = ({
   selectedDate,
@@ -48,9 +63,6 @@ const Reserve = ({
   selectedEndTime,
   handleSearchMeeting,
 }) => {
-  console.log("test4", selectedStartTime);
-
-  const classes = useStyles();
   const [meetingRooms, setMeetingRooms] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const roomsPerPage = 6;
@@ -58,79 +70,56 @@ const Reserve = ({
   const [showOverlay, setShowOverlay] = useState(false);
   const [showBookOverlay, setShowBookOverlay] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const formatDateToYYYYMMDD = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero-indexed
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}${month}${day}`;
-  };
   const [bookings, setBookings] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [bookingData, setBookingData] = useState({
     booker: "",
     meetingTitle: "",
-    meetingRoom: "", //
+    meetingRoom: "",
     date: formatDateToYYYYMMDD(new Date()),
     meetingDescription: "",
     startingTime: "",
     endingTime: "",
-    uploadedFiles: [],
     participants: [],
     teams: [],
   });
 
   useEffect(() => {
     fetchUserDetails();
+    fetchTeams(bookingData.booker);
   }, []);
 
   useEffect(() => {
-    // Update bookingData.date whenever selectedDate changes
-    setBookingData({ ...bookingData, date: selectedDate });
-  }, [selectedDate]); // Run whenever selectedDate changes
+    if (selectedDate) {
+      const formattedDate = selectedDate;
+      setBookingData((prevData) => ({
+        ...prevData,
+        date: formattedDate,
+      }));
+    }
+  }, [selectedDate]);
 
   useEffect(() => {
-    console.log("Selected start time changed:", selectedStartTime);
-    setBookingData((prevBookingData) => ({
-      ...prevBookingData,
-      startingTime: selectedStartTime,
-    }));
+    if (selectedStartTime && selectedEndTime) {
+      setBookingData((prevData) => ({
+        ...prevData,
+        startingTime: selectedStartTime,
+        endingTime: selectedEndTime,
+      }));
+    }
   }, [selectedStartTime, selectedEndTime]);
 
   useEffect(() => {
-    console.log("Selected end time changed:", selectedEndTime);
-    setBookingData((prevBookingData) => ({
-      ...prevBookingData,
-      endingTime: selectedEndTime,
-    }));
-  }, [selectedEndTime, selectedStartTime]);
-
-  const renderTimeFieldMessage = () => {
-    return (
-      <Paper className={classes.paper}>
-        <Typography variant="h6">
-          Please adjust the timefields to view available meeting rooms.
-        </Typography>
-        <div className={classes.gifContainer}>
-          <img src={bearGIF} alt="Bear GIF" />
-        </div>
-      </Paper>
-    );
-  };
-
-  useEffect(() => {
-    // Update bookingData.endingTime whenever selectedEndTime changes
-    handleSearch(
-      bookingData.startingTime,
-      bookingData.endingTime,
-      bookingData.date
-    );
-  }, [handleSearchMeeting]); // Run whenever selectedEndTime changes
+    if (handleSearchMeeting) {
+      handleSearch(
+        bookingData.startingTime,
+        bookingData.endingTime,
+        bookingData.date
+      );
+    }
+  }, [handleSearchMeeting]);
 
   const token = localStorage.getItem("token");
-
-  console.log("startingTime", bookingData.startingTime);
-  console.log("endingTime", bookingData.endingTime);
-  console.log("date", bookingData.date);
-  console.log("handleSearchMeeting", handleSearchMeeting);
 
   const getUserIdFromToken = (token) => {
     if (typeof token === "string") {
@@ -144,8 +133,29 @@ const Reserve = ({
 
   const userId = getUserIdFromToken(token);
 
+  const fetchUserDetails = async () => {
+    try {
+      const response = await api.get(`/api/${userId}/user-details`);
+      const userDetails = response.data;
+      setBookingData((prevData) => ({
+        ...prevData,
+        booker: userDetails.username,
+      }));
+    } catch (error) {
+      console.error("Error fetching user details:", error);
+    }
+  };
+
+  const fetchTeams = async (username) => {
+    try {
+      const response = await api.get(`/teams/member/${username}`);
+      setTeams(response.data);
+    } catch (error) {
+      console.error("Error fetching teams:", error);
+    }
+  };
+
   const handleSearch = async (startTime, endTime, date) => {
-    console.log("thistest");
     try {
       const response = await api.get(`/api/meeting-rooms/available`, {
         params: {
@@ -163,18 +173,7 @@ const Reserve = ({
     }
   };
 
-  const fetchUserDetails = async () => {
-    try {
-      const response = await api.get(`/api/${userId}/user-details`); // Replace `${userId}` with the actual user ID
-      const userDetails = response.data;
-      setBookingData({ ...bookingData, booker: userDetails.username }); // Set the booker's username in bookingData
-    } catch (error) {
-      console.error("Error fetching user details:", error);
-    }
-  };
-
   const handleBookVenue = async () => {
-    // Check if any required fields are empty
     if (!bookingData.meetingTitle || !bookingData.meetingDescription) {
       alert("Please fill out all required fields before booking.");
       return;
@@ -182,9 +181,8 @@ const Reserve = ({
 
     try {
       const response = await api.post("/bookings/create", bookingData);
-      console.log("Booking created successfully:", response.data);
-      console.log(bookingData);
       alert("Booking Successful");
+      handleCloseBookOverlay();
     } catch (error) {
       console.error("Error creating booking:", error.message);
     }
@@ -192,38 +190,35 @@ const Reserve = ({
 
   const handleBookingDataChange = (e) => {
     const { name, value } = e.target;
-    setBookingData({ ...bookingData, [name]: value });
+    setBookingData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSeeMore = (meetingRoom) => {
-    // Display the overlay
     setShowOverlay(true);
-
-    // Set the selected room in the state
     setSelectedRoom(meetingRoom);
 
-    // Extract roomName and date from the selectedRoom
     const { name } = meetingRoom;
     const { date } = bookingData;
 
-    // Make API call to fetch bookings for the selected room and date
     api
       .get(`/bookings/room/${name}/date/${date}`)
       .then((response) => {
-        // On successful API response, update the bookings state with the retrieved data
         setBookings(response.data);
-        console.log("test2", bookings);
       })
       .catch((error) => {
         console.error("Error fetching bookings:", error);
-        // Optionally handle errors here
       });
-    console.log("test1", bookings);
   };
 
   const handleBook = (meetingRoom) => {
     setShowBookOverlay(true);
-    setBookingData({ ...bookingData, meetingRoom: meetingRoom.name });
+    setBookingData((prevData) => ({
+      ...prevData,
+      meetingRoom: meetingRoom.name,
+    }));
   };
 
   const handleCloseOverlay = () => {
@@ -236,8 +231,11 @@ const Reserve = ({
 
   const handleDeleteTeam = (index) => {
     const updatedTeams = [...bookingData.teams];
-    updatedTeams.splice(index, 1); // Remove the team at the specified index
-    setBookingData({ ...bookingData, teams: updatedTeams });
+    updatedTeams.splice(index, 1);
+    setBookingData((prevData) => ({
+      ...prevData,
+      teams: updatedTeams,
+    }));
   };
 
   const handlePageChange = (pageNumber) => {
@@ -245,32 +243,47 @@ const Reserve = ({
   };
 
   const handleAddParticipant = () => {
-    const updatedParticipants = [...bookingData.participants, ""]; // Add an empty string for a new participant
-    setBookingData({ ...bookingData, participants: updatedParticipants });
+    const updatedParticipants = [...bookingData.participants, ""];
+    setBookingData((prevData) => ({
+      ...prevData,
+      participants: updatedParticipants,
+    }));
   };
 
-  const handleDeleteParticipant = (index) => {
+  const handleDeleteParticipant = () => {
     const updatedParticipants = [...bookingData.participants];
-    updatedParticipants.splice(index, 1); // Remove the team at the specified index
-    setBookingData({ ...bookingData, participants: updatedParticipants });
+    updatedParticipants.pop();
+    setBookingData((prevData) => ({
+      ...prevData,
+      participants: updatedParticipants,
+    }));
   };
 
   const handleAddTeam = () => {
-    const updatedTeams = [...bookingData.teams, ""]; // Add an empty string for a new team
-    setBookingData({ ...bookingData, teams: updatedTeams });
-  };
-
-  const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setBookingData({ ...bookingData, uploadedFiles: files });
+    const updatedTeams = [...bookingData.teams, ""];
+    setBookingData((prevData) => ({
+      ...prevData,
+      teams: updatedTeams,
+    }));
   };
 
   const startIndex = (currentPage - 1) * roomsPerPage;
   const endIndex = startIndex + roomsPerPage;
   const displayedMeetingRooms = meetingRooms.slice(startIndex, endIndex);
 
+  const renderTimeFieldMessage = () => (
+    <StyledPaper>
+      <Typography variant="h6">
+        Please adjust the time fields to view available meeting rooms.
+      </Typography>
+      <GifContainer>
+        <img src={bearGIF} alt="Bear GIF" />
+      </GifContainer>
+    </StyledPaper>
+  );
+
   return (
-    <div className={classes.root}>
+    <Root>
       <Paper elevation={3}>
         <div className="header" style={{ borderBottom: "1px solid #a8a8a850" }}>
           <div className="title" style={{ fontSize: "1.3rem" }}>
@@ -284,12 +297,8 @@ const Reserve = ({
         <Grid container spacing={3}>
           {displayedMeetingRooms.map((meetingRoom) => (
             <Grid item xs={12} sm={6} md={4} key={meetingRoom.id}>
-              <Paper className={`${classes.paper} ${classes.card}`}>
-                <img
-                  src={meetingRoom.image}
-                  alt={meetingRoom.name}
-                  className={classes.image}
-                />
+              <StyledPaper>
+                <Image src={meetingRoom.image} alt={meetingRoom.name} />
                 <Typography variant="h6" gutterBottom>
                   {meetingRoom.name}
                 </Typography>
@@ -317,7 +326,7 @@ const Reserve = ({
                     Book this Venue
                   </Button>
                 </div>
-              </Paper>
+              </StyledPaper>
             </Grid>
           ))}
         </Grid>
@@ -334,7 +343,6 @@ const Reserve = ({
         aria-describedby="modal-modal-description"
       >
         <Box
-          className={`${classes.modalOverlay}`}
           sx={{
             position: "absolute",
             top: "50%",
@@ -342,62 +350,125 @@ const Reserve = ({
             transform: "translate(-50%, -50%)",
             width: "80%",
             maxWidth: 600,
-            maxHeight: "80vh", // Set maximum height to 80% of viewport height
+            maxHeight: "80vh",
             bgcolor: "background.paper",
             boxShadow: 24,
             p: 4,
-            overflowY: "auto", // Enable vertical scrolling if content overflows
+            overflowY: "auto",
           }}
         >
           {selectedRoom && (
             <>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
+              <Typography
+                id="modal-modal-title"
+                variant="h5"
+                component="h2"
+                style={{
+                  borderBottom: "1px solid #a8a8a850",
+                  fontFamily: "Playfair Display, serif",
+                  fontStyle: "italic",
+                }}
+              >
                 {selectedRoom.name}
               </Typography>
-              <img
+
+              <Image
                 src={selectedRoom.image}
                 alt={selectedRoom.name}
                 style={{ width: "100%", marginTop: "10px" }}
               />
+
               <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                <strong>Location:</strong> {selectedRoom.location}
+                <strong style={{ fontFamily: "Playfair Display, serif" }}>
+                  Location:
+                </strong>{" "}
+                {selectedRoom.location}
               </Typography>
+
               <Typography sx={{ mt: 2 }}>
-                <strong>Size:</strong> {selectedRoom.size}
+                <strong style={{ fontFamily: "Playfair Display, serif" }}>
+                  Size:
+                </strong>{" "}
+                {selectedRoom.size}
               </Typography>
+
               <Typography sx={{ mt: 2 }}>
-                <strong>Info:</strong> {selectedRoom.info}
+                <strong style={{ fontFamily: "Playfair Display, serif" }}>
+                  Info:
+                </strong>{" "}
+                {selectedRoom.info}
               </Typography>
-              <Typography variant="h6" gutterBottom>
+
+              <Typography
+                variant="h6"
+                gutterBottom
+                style={{ fontFamily: "Playfair Display, serif" }}
+              >
                 {bookingData.date.substring(0, 4)}/
                 {bookingData.date.substring(4, 6)}/
                 {bookingData.date.substring(6, 8)}'s Bookings:
               </Typography>
+
               {bookings && bookings.length > 0 ? (
                 <TableContainer component={Paper}>
                   <Table>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Booker</TableCell>
-                        <TableCell>Meeting Title</TableCell>
-                        <TableCell>Starting Time</TableCell>
-                        <TableCell>Ending Time</TableCell>
+                        <TableCell
+                          style={{ fontFamily: "Playfair Display, serif" }}
+                        >
+                          Booker
+                        </TableCell>
+                        <TableCell
+                          style={{ fontFamily: "Playfair Display, serif" }}
+                        >
+                          Meeting Title
+                        </TableCell>
+                        <TableCell
+                          style={{ fontFamily: "Playfair Display, serif" }}
+                        >
+                          Starting Time
+                        </TableCell>
+                        <TableCell
+                          style={{ fontFamily: "Playfair Display, serif" }}
+                        >
+                          Ending Time
+                        </TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {bookings.map((booking) => (
                         <TableRow key={booking.id}>
-                          <TableCell>{booking.booker}</TableCell>
-                          <TableCell>{booking.meetingTitle}</TableCell>
-                          <TableCell>{booking.startingTime}</TableCell>
-                          <TableCell>{booking.endingTime}</TableCell>
+                          <TableCell
+                            style={{ fontFamily: "Playfair Display, serif" }}
+                          >
+                            {booking.booker}
+                          </TableCell>
+                          <TableCell
+                            style={{ fontFamily: "Playfair Display, serif" }}
+                          >
+                            {booking.meetingTitle}
+                          </TableCell>
+                          <TableCell
+                            style={{ fontFamily: "Playfair Display, serif" }}
+                          >
+                            {booking.startingTime}
+                          </TableCell>
+                          <TableCell
+                            style={{ fontFamily: "Playfair Display, serif" }}
+                          >
+                            {booking.endingTime}
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
                   </Table>
                 </TableContainer>
               ) : (
-                <Typography variant="body1">
+                <Typography
+                  variant="body1"
+                  style={{ fontFamily: "Playfair Display, serif" }}
+                >
                   There is no booking on this day yet.
                 </Typography>
               )}
@@ -436,14 +507,14 @@ const Reserve = ({
                 {bookingData.date.substring(4, 6)}/
                 {bookingData.date.substring(6, 8)}
               </Typography>
-              <br></br>
+              <br />
               <Typography variant="h8" gutterBottom>
                 Time: {bookingData.startingTime.substring(0, 2)}:
                 {bookingData.startingTime.substring(2, 4)}~
                 {bookingData.endingTime.substring(0, 2)}:
                 {bookingData.endingTime.substring(2, 4)}
               </Typography>
-              <br></br>
+              <br />
               <Typography variant="h8" gutterBottom>
                 Location: {selectedRoom.name}
               </Typography>
@@ -465,10 +536,25 @@ const Reserve = ({
                 value={bookingData.meetingDescription}
                 onChange={handleBookingDataChange}
               />
-              <Typography variant="h6" gutterBottom>
-                Upload Files
-              </Typography>
-              <input type="file" onChange={handleFileChange} multiple />
+              <FormControl fullWidth margin="normal">
+                <InputLabel>Teams</InputLabel>
+                <Select
+                  multiple
+                  value={bookingData.teams}
+                  onChange={(e) =>
+                    setBookingData((prevData) => ({
+                      ...prevData,
+                      teams: e.target.value,
+                    }))
+                  }
+                >
+                  {teams.map((team) => (
+                    <MenuItem key={team.id} value={team.name}>
+                      {team.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
               <Typography variant="h6" gutterBottom>
                 Add Participants
               </Typography>
@@ -483,10 +569,10 @@ const Reserve = ({
                   onChange={(e) => {
                     const updatedParticipants = [...bookingData.participants];
                     updatedParticipants[index] = e.target.value;
-                    setBookingData({
-                      ...bookingData,
+                    setBookingData((prevData) => ({
+                      ...prevData,
                       participants: updatedParticipants,
-                    });
+                    }));
                   }}
                 />
               ))}
@@ -498,74 +584,30 @@ const Reserve = ({
                 >
                   + Add Participant
                 </Button>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#f2c5ee" }}
-                  onClick={handleDeleteParticipant}
-                >
-                  - Delete Participant
-                </Button>
+                {bookingData.participants.length > 0 && (
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: "#f2c5ee" }}
+                    onClick={handleDeleteParticipant}
+                  >
+                    - Delete Participant
+                  </Button>
+                )}
               </Box>
-
-              <Typography
-                variant="h6"
-                gutterBottom
-                style={{ marginTop: "20px" }}
-              >
-                Add Teams
-              </Typography>
-              {bookingData.teams.map((team, index) => (
-                <TextField
-                  key={index}
-                  label={`Team ${index + 1}`}
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  value={team}
-                  onChange={(e) => {
-                    const updatedTeams = [...bookingData.teams];
-                    updatedTeams[index] = e.target.value;
-                    setBookingData({ ...bookingData, teams: updatedTeams });
-                  }}
-                />
-              ))}
               <Box sx={{ display: "flex", marginTop: "20px" }}>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#C5EEF2", marginRight: "10px" }}
-                  onClick={handleAddTeam}
-                >
-                  + Add Team
-                </Button>
-                <Button
-                  variant="contained"
-                  style={{ backgroundColor: "#f2c5ee" }}
-                  onClick={handleDeleteTeam}
-                >
-                  - Delete Team
-                </Button>
-              </Box>
-
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  marginTop: "20px",
-                }}
-              >
                 <Button
                   variant="contained"
                   color="primary"
                   onClick={handleBookVenue}
                 >
-                  Book This Venue
+                  Book this Venue
                 </Button>
               </Box>
             </>
           )}
         </Box>
       </Modal>
-    </div>
+    </Root>
   );
 };
 

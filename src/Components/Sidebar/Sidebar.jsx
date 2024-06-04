@@ -1,21 +1,19 @@
-// Sidebar.js
-
 import React, { useEffect, useState } from "react";
 import Logo from "../../Images/logo.png";
-import MenuIcon from "@material-ui/icons/Menu";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import DonutLargeIcon from "@material-ui/icons/DonutLarge";
-import HomeIcon from "@material-ui/icons/Home";
-import TimelineIcon from "@material-ui/icons/Timeline";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
-import GroupIcon from "@material-ui/icons/Group";
-import ImportContactsIcon from "@material-ui/icons/ImportContacts";
-import FolderIcon from "@material-ui/icons/Folder";
-import PersonIcon from "@material-ui/icons/Person";
-import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
-import SettingsIcon from "@material-ui/icons/Settings";
+import MenuIcon from "@mui/icons-material/Menu";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import DonutLargeIcon from "@mui/icons-material/DonutLarge";
+import HomeIcon from "@mui/icons-material/Home";
+import TimelineIcon from "@mui/icons-material/Timeline";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import GroupIcon from "@mui/icons-material/Group";
+import ImportContactsIcon from "@mui/icons-material/ImportContacts";
+import FolderIcon from "@mui/icons-material/Folder";
+import PersonIcon from "@mui/icons-material/Person";
+import PowerSettingsNewIcon from "@mui/icons-material/PowerSettingsNew";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { NavLink } from "react-router-dom";
 import "./Sidebar.css";
 
@@ -39,13 +37,13 @@ export default function Sidebar() {
   return (
     <div className="sidebar">
       <div className="sidebar-head">
-        <img src={Logo} id="sidebar-logo" className="small-logo" />
+        <img src={Logo} id="sidebar-logo" className="small-logo" alt="Logo" />
         <MenuIcon fontSize="large" style={{ color: "white" }} />
       </div>
       <div className="sidebar-list-1">
         <NavLink to="/" activeClassName="sidebar-selected" exact>
           <div className="sidebar-item">
-            <DashboardIcon className="sidebar-icons" /> Dashboard{" "}
+            <DashboardIcon className="sidebar-icons" /> Dashboard
           </div>
         </NavLink>
         <NavLink to="/invitations" activeClassName="sidebar-selected">
@@ -81,9 +79,9 @@ export default function Sidebar() {
             <DashboardIcon className="sidebar-icons" /> Reserve Meetings
           </div>
         </NavLink>
-        <NavLink to="/edit-meetings" activeClassName="sidebar-selected">
+        <NavLink to="/edit" activeClassName="sidebar-selected">
           <div className="sidebar-item">
-            <DonutLargeIcon className="sidebar-icons" /> Edit Reserved Meetings
+            <DonutLargeIcon className="sidebar-icons" /> View Past Meetings
           </div>
         </NavLink>
       </div>

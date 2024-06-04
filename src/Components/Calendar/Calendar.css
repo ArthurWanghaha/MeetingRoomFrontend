@@ -1,6 +1,11 @@
-.calendar-containers{
- padding: 1rem;
+.calendar-containers {
+  padding: 1rem;
 }
+
+.calendar-paper {
+  padding: 1rem;
+}
+
 .arc {
   background-color: #FFFFFF;
   border-radius: 6px;
@@ -16,11 +21,41 @@
   /* Adjust the margin below the title */
 }
 
-@media (min-width:1500px){
-  .calendar-containers{
+@media (min-width: 1500px) {
+  .calendar-containers {
     padding-top: 2rem;
     padding-left: 1rem;
     padding-right: 1rem;
     padding-bottom: 0.5rem;
   }
+}
+
+/* Fix the color of the calendar weekdays and month title */
+.react-calendar__navigation button {
+  color: #000;
+  /* Month title color */
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  color: #000;
+  /* Weekday names color */
+}
+
+.react-calendar__tile {
+  color: #000;
+  /* Date numbers color */
+}
+
+.react-calendar__tile--active {
+  background: #dcdcdc;
+  /* Highlight active date */
+  color: #000;
+  /* Active date text color */
+}
+
+.react-calendar__tile--now {
+  background: #f0f0f0;
+  /* Highlight today's date */
+  color: #000;
+  /* Today's date text color */
 }

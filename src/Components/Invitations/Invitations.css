@@ -1,74 +1,70 @@
-.progress-tracker{
-    padding: 1rem;
-    width: 100%;
-}
-
-.tracker{
-    display: flex;
-    width: 100%;
-    padding: 1rem 0rem;
-    border-top: 1px solid #a8a8a8;
+.invitation-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
 }
 
 
 
-.tracker-left{
-    padding: 0.5rem 1rem;
-    width: 40%;
-}
-
-.tracker-mid{
-    padding: 0.5rem;
-    width: 50%;
-}
-
-.tracker-right{
-    padding: 0.5rem;
-    width: 10%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-}
-
-.tracker-title{
+.title-invi {
     font-size: 18px;
-    color: #444444;
+        font-weight: 500;
+                margin-top: -1rem;
+
 }
 
-.tracker-para{
-    font-size: 12px;
-    margin-top: 4px;
-    color: #444444;
-    opacity: 0.6;
+.invitation-paper {
+    padding: 20px;
 }
 
-.tracker-info-1{
-    display: flex; 
-    align-items: center;
-    color: #6A707E;
+.invitation-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.tracker-info{
-    margin-top: 10px;
+.invitation-status {
     display: flex;
-    align-items: center;
+    justify-content: flex-end;
+}
+
+.meeting-title-s {
+    font-family: 'Baskerville', serif;
+    font-size: 1.5rem;
+    margin-bottom: 5px;
+        margin-top: -2rem;
+}
+
+.invitation-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.details-column {
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
 }
 
-@media (min-width:1500px){
+.details-column p {
+    margin: 5px 0;
+    opacity: 0.85;
+}
 
-    .tracker-left{
-        width: 30%;
-    }
-    
-    .tracker-mid{
-        width: 60%;
-    }
+.details-column button {
+    margin-top: 10px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+}
 
-    .progress-tracker{
-        padding-top: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        padding-bottom: 0;
-    }
+.details-column button:last-child {
+    background-color: #dc3545;
 }

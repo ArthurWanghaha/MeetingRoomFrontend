@@ -4,7 +4,7 @@ import Navbar from "../Components/Navbar/Navbar";
 import Invitations from "../Components/Invitations/Invitations";
 import Calendar from "../Components/Calendar/Calendar";
 import SmNotification from "../Components/SmNotification/SmNotification";
-import Tasks from "../Components/Tasks/Tasks";
+import Tasks from "../Components/Schedule/Schedule";
 import Files from "../Components/Files/Files";
 import Teams from "../Components/Teams/Teams";
 

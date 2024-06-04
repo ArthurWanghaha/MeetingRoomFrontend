@@ -1,21 +1,21 @@
-.files{
+.files {
     padding: 1rem;
 }
 
-.folder-cont{
+.folder-cont {
     margin: 10px 0px;
     display: flex;
     flex-wrap: wrap;
 }
 
-.folder{
+.folder {
     width: 33%;
     padding: 0.5rem;
 }
 
-.folder-1{
+.folder-1 {
     padding: 1rem;
-    border:1px solid #a8a8a834;
+    border: 1px solid #a8a8a834;
     border-radius: 6px;
     display: flex;
     justify-content: flex-start;
@@ -24,37 +24,27 @@
     transition: 0.5s;
 }
 
-.folder-1:hover{
-    transform: scale(1.05,1.05);
+.folder-1:hover {
+    transform: scale(1.05, 1.05);
 }
 
-.folder-text{
+.folder-text {
     margin-left: 10px;
 }
 
-.folder-head{
+.folder-head {
     font-size: 14px;
     font-weight: 500;
 }
 
-.folder-para{
+.folder-para {
     font-size: 14px;
-    color:#8F9BB3;
+    color: #8f9bb3;
 }
 
-
-@media (min-width:1500px){
-
-    .files{
-        padding-top: 2rem;
-        padding-left: 2rem;
-        padding-right: 2rem;
-        padding-bottom: 2rem;
-    }
-
-    .folder{
-        width: 25%;
-    }
+.folder-date {
+    font-size: 12px;
+    color: #8f9bb3;
 }
 
 .overlay {
@@ -64,9 +54,7 @@
     width: 100%;
     height: 100%;
     background-color: rgba(255, 255, 255, 0.9);
-    /* Semi-transparent white background */
     z-index: 1000;
-    /* Make sure the overlay is above other elements */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -78,15 +66,10 @@
     background-color: white;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Add a shadow effect */
 }
 
 .overlay-content h2 {
     margin-bottom: 10px;
-}
-
-.overlay-content p {
-    margin-bottom: 20px;
 }
 
 .overlay-content div {
@@ -95,4 +78,60 @@
 
 .overlay-content button {
     margin-right: 10px;
+}
+
+.invitation-container {
+  padding: 20px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.invitation-card {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+
+.meeting-title {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.invitation-card p {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+.invitation-actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.invitation-actions button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+}
+
+button:hover {
+  background-color: #0056b3;
 }

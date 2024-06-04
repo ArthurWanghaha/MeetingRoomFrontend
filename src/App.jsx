@@ -1,17 +1,18 @@
 // App.js
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from './Pages/Dashboard';
-import Notifications from './Pages/Notifications'; 
-import Login from './Pages/login/Login';
-import MeetingSchedule from './Pages/MeetingSchedule';
-import Signup from './Pages/signup/Signup';
-import './App.css';
-import PersonalSettings from './Pages/PersonalSettings';
-import Reserve from './Pages/Reserve';
-import FilesArchive from './Pages/FilesArchive';
-import Teams from './Pages/Team';
-import Invitations from './Pages/Invitation';
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./Pages/Dashboard";
+import Notifications from "./Pages/Notifications";
+import Login from "./Pages/login/Login";
+import MeetingSchedule from "./Pages/MeetingSchedule";
+import Signup from "./Pages/signup/Signup";
+import "./App.css";
+import PersonalSettings from "./Pages/PersonalSettings";
+import Reserve from "./Pages/Reserve";
+import FilesArchive from "./Pages/FilesArchive";
+import Teams from "./Pages/Team";
+import Invitations from "./Pages/Invitation";
+import Edit from "./Pages/Edit";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route exact path="/files" element={<FilesArchive />} />
         <Route exact path="/teams" element={<Teams />} />
         <Route exact path="/invitations" element={<Invitations />} />
+        <Route exact path="/edit" element={<Edit />} />
       </Routes>
     </BrowserRouter>
   );
